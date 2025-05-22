@@ -4,10 +4,13 @@ import Button from "./components/Button";
 import { Icon } from "react-native-elements";
 import { t } from "react-native-tailwindcss";
 
+// SettingsScreen component displays the settings page UI
 function SettingsScreen({ navigation }) {
 
     return (
+        // Main container with safe area and centered content
         <SafeAreaView style={[t.flex, t.justifyCenter, t.itemsCenter]}>
+            {/* Back button at the top left */}
             <View style={[t.selfStart, t.mT8, t.mL6, t.z10]}>
                 <TouchableOpacity
                     style={[t.bgGray300, t.w14, t.h14, t.roundedFull, t.absolute, t.opacity70, t.itemsCenter, t.flex, t.justifyCenter]}
@@ -20,28 +23,31 @@ function SettingsScreen({ navigation }) {
                     />
                 </TouchableOpacity>
             </View>
+            {/* Scrollable content */}
             <ScrollView showsVerticalScrollIndicator={false}>
+                {/* Header */}
                 <View style={[t.mT12, t.selfStart]}>
                     <Text style={[styles.header, t.text3xl]}>Settings</Text>
                 </View>
+                {/* Account section */}
                 <View style={styles.container}>
                     <Text style={styles.subHeader}>Account</Text>
                     <Button text="Language" icon="language-outline" onPress={() => console.log("")} />
                     <Button text="Font Size" icon="text-outline" onPress={() => console.log("")} />
                 </View>
-
+                {/* Notifications section */}
                 <View style={styles.container}>
                     <Text style={styles.subHeader}>Notifications</Text>
                     <Button text="Notification Settings" icon="notifications-circle-outline" onPress={() => console.log("")} />
                 </View>
-
+                {/* About section */}
                 <View style={styles.container}>
                     <Text style={styles.subHeader}>About</Text>
                     <Button text="Terms of Use" icon="newspaper-outline" onPress={() => console.log("")} />
                     <Button text="Privacy Policy" icon="shield-checkmark-outline" onPress={() => console.log("")} />
                     <Button text="Report a problem" icon="alert-circle-outline" onPress={() => console.log("")} />
                 </View>
-
+                {/* Logout button */}
                 <View style={[styles.container, t.mT3, t.mB10]}>
                     <Button text="Logout" icon="exit-outline" />
                 </View>
@@ -50,6 +56,7 @@ function SettingsScreen({ navigation }) {
     );
 };
 
+// Styles for the component
 const styles = StyleSheet.create({
     header: {
         fontFamily: "Poppins-Bold",

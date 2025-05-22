@@ -17,26 +17,26 @@ import { COLORS } from "../../constants";
 import axios from "axios";
 import DayItem from "./components/DayItem";
 
+// Create an axios instance for OpenWeatherMap API
 const weatherApi = axios.create({
   baseURL: 'https://api.openweathermap.org/data/2.5/',
 });
 
+// Add API key and units to every request
 weatherApi.interceptors.request.use((config) => {
   config.params = config.params || {};
-  // IMPORTANT: Replace with your actual OpenWeatherMap API Key
-  // Consider using environment variables for security in a real app (e.g., expo-constants or react-native-dotenv)
   config.params.APPID = 'b76c485ab461112dd75fafbdd0334228';
   config.params.units = config.params.units || 'metric';
   return config;
 });
 
-// Helper function to format date for display
+// Helper: Format UNIX timestamp to readable date string
 const formatDate = (timestamp) => {
   const date = new Date(timestamp * 1000); // OpenWeatherMap `dt` is in seconds
   return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
 };
 
-// Helper function to extract morning and night data from the 3-hour forecast list
+// Helper: Process 3-hour forecast list to extract morning and night temps for each day
 const processForecastData = (list) => {
   const dailyForecasts = {};
 
@@ -55,29 +55,30 @@ const processForecastData = (list) => {
 
     const hour = date.getHours();
 
-    // Assign morning temperature (e.g., 6 AM - 9 AM data point)
+    // Assign morning temperature (6 AM - 9 AM)
     if (hour >= 6 && hour <= 9 && !dailyForecasts[dayKey].morning) {
       dailyForecasts[dayKey].morning = item.main.temp;
     }
-    // Assign night temperature (e.g., 6 PM - 9 PM data point)
+    // Assign night temperature (6 PM - 9 PM)
     if (hour >= 18 && hour <= 21 && !dailyForecasts[dayKey].night) {
       dailyForecasts[dayKey].night = item.main.temp;
     }
   });
 
-  // Convert to an array and sort by date for consistent display
+  // Convert to array and sort by date
   return Object.values(dailyForecasts).sort((a, b) => a.date - b.date);
 };
 
 
 const SummaryScreen = ({ navigation, route }) => {
-const [weatherForecast, setWeatherForecast] = useState(null);
+  // State for weather data, loading, and error
+  const [weatherForecast, setWeatherForecast] = useState(null);
   const [weatherLoading, setWeatherLoading] = useState(true);
   const [weatherError, setWeatherError] = useState(null);
 
   const weatherCity = "London"; // Example city
 
-  // Function to fetch weather data
+  // Fetch weather data from API
   const fetchWeather = async () => {
     setWeatherLoading(true);
     setWeatherError(null);
@@ -94,9 +95,8 @@ const [weatherForecast, setWeatherForecast] = useState(null);
     }
   };
 
-  // Initial data load effect
+  // On mount: prepare splash screen and fetch weather
   useEffect(() => {
-    // Keep your existing splash screen logic
     async function prepare() {
       try {
         await SplashScreen.preventAutoHideAsync();
@@ -104,47 +104,43 @@ const [weatherForecast, setWeatherForecast] = useState(null);
       } catch (e) {
         console.warn(e);
       } finally {
-        // Here you can start fetching initial data, including weather
+        // Fetch weather data
         fetchWeather();
       }
     }
     prepare();
   }, []); // Run once on component mount
 
-
-
-
   return (
     <View style={styles.containerHome} onLayout={route.params.onLayoutRootView}>
-      {/* This is the top section of the screen for title and action icons */}
+      {/* Top section: title and spacing */}
       <View style={styles.top}>
         <Spacer />
         <HomeTitle />
-      <Spacer />
+        <Spacer />
       </View>
 
-      {/* This is the main portion of the screen */}
+      {/* Main content section */}
       <View style={styles.mainContainer}>
-        {/* This is going to be the main 2 sub sections */}
+        {/* Section header */}
         <View style={[styles.horizontalContainer]}>
-              <View
-                style={[
-                  t.flex,
-                  t.flexCol,
-                  styles.circleRounded,
-                  styles.streaksPadding,
-                ]}
-              >
-                <View style={[t.flex, t.justifyCenter, t.flexCol]}>
+          <View
+            style={[
+              t.flex,
+              t.flexCol,
+              styles.circleRounded,
+              styles.streaksPadding,
+            ]}
+          >
+            <View style={[t.flex, t.justifyCenter, t.flexCol]}>
               <Text style={styles.weatherText}>
                 This Week...
               </Text>
-                </View>
-              </View>
-
+            </View>
+          </View>
         </View>
 
-        {/* Top Tabs Navigator */}
+        {/* Weekly forecast: one DayItem per day */}
         <View style={[t.flex, t.flexCol, t.justifyBetween, t.wFull]}>
           <DayItem day="Mon" weatherForecast={weatherForecast} index={0}/>
           <DayItem day="Tues" weatherForecast={weatherForecast} index={1}/>
@@ -153,12 +149,13 @@ const [weatherForecast, setWeatherForecast] = useState(null);
           <DayItem day="Fri" weatherForecast={weatherForecast} index={4}/>
           <DayItem day="Sat" weatherForecast={weatherForecast} index={5}/>
           <DayItem day="Sun" weatherForecast={weatherForecast} index={6}/>
+        </View>
       </View>
-    </View>
     </View>
   );
 };
 
+// Styles for the screen
 const styles = StyleSheet.create({
   shadow: {
     shadowOpacity: 0.15,
@@ -257,7 +254,6 @@ const styles = StyleSheet.create({
   },
   favGame: {
     backgroundColor: COLORS.secondary,
-
     alignSelf: "center",
     justifyContent: "center",
     height: "25%",

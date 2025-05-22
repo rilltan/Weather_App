@@ -14,26 +14,35 @@ import Button from "./components/Button";
 import PinButton from "./components/PinButton";
 import { COLORS } from "../../constants";
 
+// Main settings/profile screen component
 function SettingsScreen({ navigation }) {
   return (
+    // Ensures content is rendered within safe area boundaries
     <SafeAreaView>
+      {/* Box layout with padding and flex column */}
       <Box style={[t.flex, t.flexCol]} pl={10}>
+        {/* Scrollable content */}
         <ScrollView showsVerticalScrollIndicator={false}>
+          {/* Profile title */}
           <View style={[t.mT12, t.selfStart]}>
             <Text style={[styles.title]}>Profile</Text>
           </View>
+          {/* Account section */}
           <View style={styles.container}>
             <Text style={styles.subHeader}>Account</Text>
+            {/* Edit Location button */}
             <PinButton
               text="Edit Location"
               icon="pin-outline"
               onPress={() => console.log("")}
             />
+            {/* Language button */}
             <Button
               text="Language"
               icon="language-outline"
               onPress={() => console.log("")}
             />
+            {/* Font Size button */}
             <Button
               text="Font Size"
               icon="text-outline"
@@ -41,8 +50,10 @@ function SettingsScreen({ navigation }) {
             />
           </View>
 
+          {/* Notifications section */}
           <View style={styles.container}>
             <Text style={styles.subHeader}>Notifications</Text>
+            {/* Notification Settings button */}
             <Button
               text="Notification Settings"
               icon="notifications-circle-outline"
@@ -50,18 +61,22 @@ function SettingsScreen({ navigation }) {
             />
           </View>
 
+          {/* About section */}
           <View style={styles.container}>
             <Text style={styles.subHeader}>About</Text>
+            {/* Terms of Use button */}
             <Button
               text="Terms of Use"
               icon="newspaper-outline"
               onPress={() => console.log("")}
             />
+            {/* Privacy Policy button */}
             <Button
               text="Privacy Policy"
               icon="shield-checkmark-outline"
               onPress={() => console.log("")}
             />
+            {/* Report a problem button */}
             <Button
               text="Report a problem"
               icon="alert-circle-outline"
@@ -69,6 +84,7 @@ function SettingsScreen({ navigation }) {
             />
           </View>
 
+          {/* Logout button */}
           <View style={[styles.container, t.mT3, t.mB10]}>
             <Button text="Logout" icon="exit-outline" />
           </View>
@@ -78,6 +94,7 @@ function SettingsScreen({ navigation }) {
   );
 }
 
+// Styles for the screen
 const styles = StyleSheet.create({
   title: {
     fontFamily: "Poppins-Bold",
