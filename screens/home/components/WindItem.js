@@ -12,7 +12,7 @@ const WindItem = ({name, rank, rating, navigation}) => {
     return (
         <TouchableOpacity
             style={[styles.container, { backgroundColor: "#F6F6F6" }]}
-            onPress={() => {navigation.push('Game Stats', {name: name})}}
+            onPress={() => {}}
         >
             <View style={[t.flex, t.flexCol, t.justifyCenter, t.itemsCenter]}>
                 

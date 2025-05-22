@@ -1,3 +1,4 @@
+// Import necessary libraries and components
 import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
@@ -22,11 +23,12 @@ import SunItem from "./components/SunItem";
 
 import axios from 'axios';
 
-
+// Create an axios instance for OpenWeatherMap API
 const api = axios.create({
   baseURL: 'https://api.openweathermap.org/data/2.5/',
 });
 
+// Attach API key and units to every request
 api.interceptors.request.use((config) => {
   config.params = config.params || {};
   config.params.APPID = 'b76c485ab461112dd75fafbdd0334228';
@@ -34,8 +36,10 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// Main HomeScreen component
 const HomeScreen = ({ navigation, route }) => {
 
+  // State variables for weather data and UI state
   const [temperature, setTemperature] = useState(null);
   const [sunrise, setSunrise] = useState(null);
   const [sunset, setSunset] = useState(null);
@@ -43,16 +47,19 @@ const HomeScreen = ({ navigation, route }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Fetch weather data on component mount
   useEffect(() => {
     const fetchWeatherData = async () => {
       try {
+        // Fetch weather for Cambridge, GB
         const response = await api.get('weather', {
           params: {
             q: 'Cambridge,GB',
           },
         });
         setTemperature(response.data.main.temp);
-        // Convert sunrise/sunset timestamps to local time
+
+        // Convert sunrise/sunset timestamps to local time using timezone offset
         const timezoneOffset = response.data.timezone; // in seconds
         const localSunrise = new Date((response.data.sys.sunrise + timezoneOffset) * 1000);
         const localSunset = new Date((response.data.sys.sunset + timezoneOffset) * 1000);
@@ -66,15 +73,15 @@ const HomeScreen = ({ navigation, route }) => {
         setSunrise(`${sunriseHours}:${sunriseMinutes}`);
         setSunset(`${sunsetHours}:${sunsetMinutes}`);
 
-        //  It might not always be present, so we check.
+        // Handle rainfall data if present
         if (response.data.rain) {
           const rainLastHour = response.data.rain['1h']; // Rainfall in the last hour
           const rainLast3Hours = response.data.rain['3h']; // Rainfall in the last 3 hours
 
           if (rainLastHour) {
-              setRainfall(rainLastHour);
+              setRainfall(rainLastHour.toFixed(1));
           } else if (rainLast3Hours) {
-              setRainfall(rainLast3Hours);
+              setRainfall(rainLast3Hours.toFixed(1));
           } else {
              setRainfall(0);
           }
@@ -83,6 +90,7 @@ const HomeScreen = ({ navigation, route }) => {
         }
 
       } catch (err) {
+        // Handle errors
         setError(err.message || 'Failed to fetch weather data');
       } finally {
         setLoading(false);
@@ -92,52 +100,55 @@ const HomeScreen = ({ navigation, route }) => {
     fetchWeatherData();
   }, []);
 
+  // Render the UI
   return (
     <View style={styles.containerHome} onLayout={route.params.onLayoutRootView}>
-      {/* This is the top section of the screen for title and action icons */}
+      {/* Top section: title and action icons */}
       <View style={styles.top}>
         <Spacer />
         <HomeTitle />
-      <Spacer />
-      </View>
+        <Spacer />
+      </View> 
 
-      {/* This is the main portion of the screen */}
+      {/* Main content section */}
       <View style={styles.mainContainer}>
-        {/* This is going to be the main 2 sub sections */}
+        {/* Main horizontal container with weather and screentime */}
         <View style={[styles.horizontalContainer]}>
-              <View
-                style={[
-                  t.flex,
-                  t.flexCol,
-                  styles.circleRounded,
-                  styles.streaksPadding,
-                ]}
-              >
-                <View style={[t.flex, t.justifyCenter, t.flexCol]}>
-                  <Image
+          {/* Weather display section */}
+          <View
+            style={[
+              t.flex,
+              t.flexCol,
+              styles.circleRounded,
+              styles.streaksPadding,
+            ]}
+          >
+            <View style={[t.flex, t.justifyCenter, t.flexCol]}>
+              {/* Weather image */}
+              <Image
                 source={images.partlyCloudyImage}
                 style={{
                   width: 170,
                   height: 170,
                 }}
               />
+              {/* Weather description */}
               <Text style={styles.weatherText}>
                 Sunny
               </Text>
+              {/* Temperature */}
               <Text style={styles.weatherNumber}>
                 {temperature} °C
               </Text>
-               <Text style={styles.visibilityText}>
+              {/* Visibility (static value) */}
+              <Text style={styles.visibilityText}>
                 Visibility: 22 miles away
               </Text>
-                </View>
-              </View>
+            </View>
+          </View>
 
-          {/* Second Row: Screentime */}
-
-          {/* Screentime */}
+          {/* Screentime section (currently empty) */}
           <TouchableOpacity style={[styles.screentimeContainer, styles.shadow]}>
-            {/* The Streak text */}
             <Box
               bg={{
                 linearGradient: {
@@ -164,20 +175,23 @@ const HomeScreen = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
 
-        {/* Top Tabs Navigator */}
+        {/* Bottom section: Recommendation, Wind, Rain, Sun */}
         <View style={[t.flex, t.flexCol, t.justifyBetween, t.wFull]}>
+          {/* Recommendation and Wind row */}
           <View style={[t.flex, t.flexRow, t.justifyBetween, t.wFull]}>
-                <RecommendationItem name="Recommendation" />
-                <WindItem name="Wind"   />
+            <RecommendationItem name="Recommendation" />
+            <WindItem name="Wind" />
           </View>
-          <RainItem rainfall={rainfall} navigation={navigation}  />
+          {/* Rain and Sun rows */}
+          <RainItem rainfall={rainfall} navigation={navigation} />
           <SunItem sunrise={sunrise} sunset={sunset} />
+        </View>
       </View>
-    </View>
     </View>
   );
 };
 
+// Styles for the HomeScreen component
 const styles = StyleSheet.create({
   shadow: {
     shadowOpacity: 0.15,
@@ -259,7 +273,6 @@ const styles = StyleSheet.create({
     fontWeight: 500,
     fontSize: 15,
   },
-
   containerHeader: {
     color: COLORS.black,
     marginVertical: 10,
@@ -276,7 +289,6 @@ const styles = StyleSheet.create({
   },
   favGame: {
     backgroundColor: COLORS.secondary,
-
     alignSelf: "center",
     justifyContent: "center",
     height: "25%",
@@ -296,4 +308,5 @@ const styles = StyleSheet.create({
   },
 });
 
+// Export the HomeScreen component as default
 export default HomeScreen;

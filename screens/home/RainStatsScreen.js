@@ -8,21 +8,11 @@ import {
   ScrollView,
   Image,
 } from "react-native";
-import { Avatar, Box, Center } from "native-base";
 import { t } from "react-native-tailwindcss";
 import { COLORS, icons } from "../../constants";
-import BackButton from "./components/BackButton";
-import Spacer from "./components/Spacer";
 import RainfallChart from "./components/RainfallChart";
 
 function RainStatsScreen({ route, navigation }) {
-  const { name } = route.params;
-
-  const getInitials = (name) => {
-    let n = name.split(" ");
-    let i = n.map((w) => w[0]);
-    return i.join("").toUpperCase();
-  };
 
   return (
     <SafeAreaView

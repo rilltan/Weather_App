@@ -1,35 +1,28 @@
 import React, { Fragment, useContext } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { t } from "react-native-tailwindcss";
 import Badge from './Badge';
 
-import { images } from "../../../constants";
-
-
-const RecommendationItem = ({name, rank, rating, navigation}) => {
+const ListItem = ({name, rank, rating, navigation}) => {
 
 
     return (
         <TouchableOpacity
             style={[styles.container, { backgroundColor: "#F6F6F6" }]}
-            onPress={() => {}}
+            onPress={() => {navigation.push('Game Stats', {name: name})}}
         >
-            <View style={[t.flex, t.flexCol, t.justifyCenter, t.itemsCenter]}>
-                
-                    <Text style={[styles.text, { color: '#888899', marginBottom: 10}]}>RECOMMENDATION</Text>
+            <View style={[t.flex, t.flexCol]}>
+                <View style={[t.flex, t.flexRow, t.h3_4, t.wFull, t.justifyBetween]}>
+                    <View style={[t.flex, t.flexCol, t.justifyBetween]}>
+                        <Text style={[styles.mainText, { color: '#000'}]}>{ name }</Text>
+                    </View>
+                </View>
 
-
-                <Image
-                    source={images.waterbottleImage}
-                    style={{
-                        width: 40,
-                        height: 40,
-                        marginBottom: 10
-                    }}
-                />
-
-                    <Text style={[styles.text, { color: '#888899'}]}>Bring Water!</Text>
+                <View style={[t.flex, t.flexRow, t.h1_4, t.wFull, t.justifyBetween]}>
+                    <Text style={[styles.text, { color: '#888899'}]}>Local: #{ rank }</Text>
+                </View>
             </View>
+                <Badge value={ rating } />
         </TouchableOpacity>
     )
 };
@@ -50,7 +43,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderRadius: 14,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         paddingHorizontal: 20,
         backgroundColor: 'white',
         shadowColor: '#000',
@@ -63,4 +56,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default RecommendationItem;
+export default ListItem;

@@ -6,13 +6,13 @@ import { COLORS, icons, images } from "../../../constants";
 
 
 
-const RainItem = ({rainfall, navigation}) => {
+const RainItem = ({name, rank, navigation}) => {
 
 
     return (
         <TouchableOpacity
             style={[styles.container, { backgroundColor: "#F6F6F6" }]}
-            onPress={() => {navigation.push('Rain Stats')}}
+            onPress={() => {navigation.push('Game Stats', {name: name})}}
         >
                 <View style={[t.flex, t.flexRow, t.justifyBetween]}>
                     <View style={[t.flex, t.flexCol, t.justifyBetween]}>

@@ -6,29 +6,27 @@ import Badge from './Badge';
 import { images } from "../../../constants";
 
 
-const RecommendationItem = ({name, rank, rating, navigation}) => {
+const WindItem = ({name, rank, rating, navigation}) => {
 
 
     return (
         <TouchableOpacity
             style={[styles.container, { backgroundColor: "#F6F6F6" }]}
-            onPress={() => {}}
+            onPress={() => {navigation.push('Game Stats', {name: name})}}
         >
             <View style={[t.flex, t.flexCol, t.justifyCenter, t.itemsCenter]}>
                 
-                    <Text style={[styles.text, { color: '#888899', marginBottom: 10}]}>RECOMMENDATION</Text>
+                    <Text style={[styles.text, { color: '#888899', marginBottom: 10}]}>WIND SPEED</Text>
 
 
                 <Image
-                    source={images.waterbottleImage}
+                    source={images.wind1Image}
                     style={{
-                        width: 40,
-                        height: 40,
-                        marginBottom: 10
+                        width: 100,
+                        height: 60,
+                        marginBottom: 5,
                     }}
                 />
-
-                    <Text style={[styles.text, { color: '#888899'}]}>Bring Water!</Text>
             </View>
         </TouchableOpacity>
     )
@@ -47,6 +45,7 @@ const styles = StyleSheet.create({
     },
     container: {
         height: 75,
+        width: 200,
         flexDirection: 'row',
         borderRadius: 14,
         alignItems: 'center',
@@ -63,4 +62,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default RecommendationItem;
+export default WindItem;
