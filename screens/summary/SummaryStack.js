@@ -4,7 +4,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 import HomeScreen from "./SummaryScreen";
-import GameStatsScreen from "./GameStatsScreen";
 import { useDispatch } from "react-redux";
 
 const Summary = createStackNavigator();
@@ -43,7 +42,6 @@ const SummaryStack = ({ route, navigation }) => {
           },
         }}
       >
-        <Summary.Screen name="Game Stats" component={GameStatsScreen} />
       </Summary.Group>
     </Summary.Navigator>
   );
